@@ -32,7 +32,7 @@
         <section>
           <h2>Advanced Usage of the C++23 Stacktrace Library</h2>
             <p>
-            <h4>(How to Use Stacktraces in Real-World Deployments)</h4>
+            <h4>(Stacktraces and How to Use Them)</h4>
             <small>
               Jim (James) Pascoe<br>
               <a href="http://www.james-pascoe.com">http://www.james-pascoe.com</a><br>
@@ -49,6 +49,64 @@
           Here is my email address and URL (if you want to find out a bit about what I've done in the past) and also, this
           is the link to the online talk, so you can follow along from the comfort of your own browser if you prefer. So,
           you can use the hamburger icon to skip between the slides and select a light theme if you prefer.
+          </aside>
+        </section>
+
+        <section>
+          <h3 style="color:yellow">Stacktraces, tracebacks, call sequences</h3>
+          <ul>
+            <span class="fragment"><li>Locate problems without a debugger</li></span>
+            <span class="fragment"><ul><li>assertions, exceptions, post mortem</li></ul></span>
+            <span class="fragment"><li>Analyse performance</li></span>
+            <span class="fragment"><ul><li>buffer stacktraces </span><span class="fragment">(combine with metrics)</span></li></ul></span>
+            <span class="fragment"><li>Prior to C++23, no standard stacktraces</li></span>
+            <span class="fragment">
+              <ul>
+                <li>
+                  <a href="https://www.gnu.org/software/libc/manual/html_node/Backtraces.html">backtrace</a>, 
+                  <a href="https://www.nongnu.org/libunwind/">libunwind</a>, 
+                  <a href="https://www.commandlinux.com/man-page/man1/catchsegv.1.html">catchsegv</a>
+                </li>
+              </ul>
+            </span>
+            <span class="fragment"><li><a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0881r7.html">P0881R7: A Proposal to Add A Stacktrace Library</a></li></span>
+            <span class="fragment"><ul><li>based on <a href="https://www.boost.org/doc/libs/master/doc/html/stacktrace.html">Boost::Stacktrace</a></li></ul></span>
+          </ul>
+          <aside class="notes">
+            Backtrace (glibc), libunwind (LLVM), catchsegv (Linux)
+          </aside>
+        </section>
+
+<!--
+
+  4. Getting Started
+
+  5. Demo Video
+
+  6. API Overview
+
+  7. Async-Signal Safety
+
+    - Consider using Boost:stacktrace::safe_dump_to
+
+  8.
+  9.
+  10.
+  11.
+
+-->
+
+        <section>
+          <h3 style="color:yellow">Resources</h3>
+          <ul>
+            <span class="fragment"><li><a href="https://youtu.be/9IcxniCxKlQ?si=GtuMOVHm8wzRvv56">C++23's Awesome std::stacktrace Library</a></li>
+            <span class="fragment"><ul><li>C++ Weekly (Jason Turner)</li></ul></span>
+            <span class="fragment"><li><a href="https://www.sandordargo.com/blog/2022/09/21/cpp23-stacktrace-library">C++23: The Stacktrace Library</a></li>
+            <span class="fragment"><ul><li>Sandor Dargo's Blog</li></ul></span>
+            <span class="fragment"><li><a href="https://www.boost.org/doc/libs/master/doc/html/stacktrace.html">Boost::Stacktrace Documentation</a></li>
+            <span class="fragment"><li><a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0881r7.html">P0881R7: A Proposal to Add A Stacktrace Library</a></li>
+          </ul>
+          <aside class="notes">
           </aside>
         </section>
 
