@@ -81,18 +81,32 @@
 
   4. Getting Started
 
-  5. Demo Video
+    - Code snippet
+    - Mention github (materials) - CMake
+    - Toolchain support
+
+  5. Output
+
+    - Show output (could combine with previous slide)
+    - Compiler options matter:
+     - -O0 -g -rdynamic
+
+  5. GDB Demo Video
+
+    - Show video and discuss
+    - Point out that libc refers to the C standard library and glibc is an implementation of libc
+    - Tip: Provide link to GDB console
 
   6. API Overview
 
+    - How to save stacktraces for later
+    - How do we use stacktraces for catching segfaults
+
   7. Async-Signal Safety
 
+    - What is the problem?
+    - Can I safely generate a stacktrace from a signal handler?
     - Consider using Boost:stacktrace::safe_dump_to
-
-  8.
-  9.
-  10.
-  11.
 
 -->
 
