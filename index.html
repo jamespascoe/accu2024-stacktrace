@@ -77,13 +77,30 @@
           </aside>
         </section>
 
+        <section data-menu-title="Example">
+          <h2><a href="https://github.com/jamespascoe/accu2024-example-code/blob/master/stacktrace.cpp">Getting Started</a></h2>
+          <pre><code class="c++" data-trim data-line-numbers="|5|">
+#include &ltstacktrace&gt
+#include &ltiostream&gt
+
+void foo() {
+    auto trace = std::stacktrace::current();
+    std::cout &lt&lt std::to_string(trace) &lt&lt '\n';
+}
+
+int main(void)
+{
+  foo();
+}
+          </code></pre>
+          <aside class="notes">
+            - Code snippet
+            - Mention github (materials) - CMake
+            - Toolchain support
+          </aside>
+        </section>
+
 <!--
-
-  4. Getting Started
-
-    - Code snippet
-    - Mention github (materials) - CMake
-    - Toolchain support
 
   5. Output
 
@@ -101,6 +118,7 @@
 
     - How to save stacktraces for later
     - How do we use stacktraces for catching segfaults
+    - What about multi-threading and re-entrancy
 
   7. Async-Signal Safety
 
