@@ -120,11 +120,17 @@ int main(void)
     - How do we use stacktraces for catching segfaults
     - What about multi-threading and re-entrancy
 
-  7. Async-Signal Safety
+  7. Async Signal Safety
 
-    - What is the problem?
-    - Can I safely generate a stacktrace from a signal handler?
+    - Can I use std::stacktrace in a signal handler?
+    - Not currently, but the design is extensible
+    - Custom allocators and lazy trace frames
     - Consider using Boost:stacktrace::safe_dump_to
+    - signal-safety(7) — Linux manual page
+
+Notes:
+    - As a general rule of thumb, nonrentrant functions are generally unsafe to call from signal handlers
+    - Do you need to record the whole stack?
 
 -->
 
@@ -136,6 +142,7 @@ int main(void)
             <span class="fragment"><li><a href="https://www.sandordargo.com/blog/2022/09/21/cpp23-stacktrace-library">C++23: The Stacktrace Library</a></li>
             <span class="fragment"><ul><li>Sandor Dargo's Blog</li></ul></span>
             <span class="fragment"><li><a href="https://www.boost.org/doc/libs/master/doc/html/stacktrace.html">Boost::Stacktrace Documentation</a></li>
+            <span class="fragment"><li><a href="https://man7.org/linux/man-pages/man7/signal-safety.7.html">signal-safety(7) — Linux manual page</a></li>
             <span class="fragment"><li><a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0881r7.html">P0881R7: A Proposal to Add A Stacktrace Library</a></li>
           </ul>
           <aside class="notes">
