@@ -119,23 +119,25 @@ int main(void)
     - How to save stacktraces for later
     - How do we use stacktraces for catching segfaults
     - What about multi-threading and re-entrancy
-
-  7. Async Signal Safety
-
-    - Can I use std::stacktrace in a signal handler?
-    - Not currently, but the design is extensible
-    - Custom allocators and lazy trace frames
-    - Consider using Boost:stacktrace::safe_dump_to
-    - signal-safety(7) — Linux manual page
-
-Notes:
-    - As a general rule of thumb, nonrentrant functions are generally unsafe to call from signal handlers
-    - Do you need to record the whole stack?
-
 -->
 
         <section>
-          <h3 style="color:yellow">Resources</h3>
+          <h2 style="color:yellow">Async Signal Safety</h2>
+          <ul>
+            <span class="fragment"><li>Can I use <a href="">std::stacktrace</a> in a signal handler?</li>
+            <span class="fragment"><li>Not currently, but the design is extensible</li>
+            <span class="fragment"><li>Custom allocators and lazy trace frames</li>
+            <span class="fragment"><li>Consider using <a href="https://www.boost.org/doc/libs/1_84_0/doc/html/stacktrace/reference.html#header.boost.stacktrace.safe_dump_to_hpp">Boost:stacktrace::safe_dump_to</a></li>
+            <span class="fragment"><li><a href="https://man7.org/linux/man-pages/man7/signal-safety.7.html">signal-safety(7) — Linux manual page</a></li>
+          </ul>
+          <aside class="notes">
+          As a general rule of thumb, nonrentrant functions are generally unsafe to call from signal handlers.
+          Do you need to record the whole stack?
+          </aside>
+        </section>
+
+        <section>
+          <h2 style="color:yellow">Resources</h2>
           <ul>
             <span class="fragment"><li><a href="https://youtu.be/9IcxniCxKlQ?si=GtuMOVHm8wzRvv56">C++23's Awesome std::stacktrace Library</a></li>
             <span class="fragment"><ul><li>C++ Weekly (Jason Turner)</li></ul></span>
