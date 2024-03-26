@@ -77,20 +77,57 @@
           </aside>
         </section>
 
-        <section data-menu-title="Example">
-          <h2><a href="https://github.com/jamespascoe/accu2024-example-code/blob/master/stacktrace.cpp">Getting Started</a></h2>
-          <pre><code class="c++" data-trim data-line-numbers="|5|">
-#include &ltstacktrace&gt
+        <section data-menu-title="Fibonacci Example">
+          <h2><a href="https://github.com/jamespascoe/accu2024-example-code/blob/master/stacktrace.cpp">Fibonacci (with Stacktrace)</a></h2>
+          <pre><code class="c++" data-trim data-line-numbers="|15-25|17-22|17|17-22|37-38|40-41|43-48|">
 #include &ltiostream&gt
+#include &ltformat&gt
+#include &ltstacktrace&gt
 
-void foo() {
+class fib_with_stacktrace {
+
+  std::stacktrace::size_type max_depth = 0;
+  std::stacktrace max_trace;
+
+public:
+
+  fib_with_stacktrace() = default;
+
+  // Return the nth number in the fibonaci sequence
+  unsigned int fib(unsigned int n)
+  {
     auto trace = std::stacktrace::current();
-    std::cout &lt&lt std::to_string(trace) &lt&lt '\n';
-}
+    auto depth = trace.size();
+    if (trace.size() &gt max_depth) {
+      max_trace = trace;
+      max_depth = depth;
+    }
+
+    return n &lt 2 ? n : fib(n-1) + fib(n-2);
+  }
+
+  std::stacktrace get_max_trace() const
+  {
+    return max_trace;
+  }
+};
 
 int main(void)
 {
-  foo();
+  fib_with_stacktrace fib_wst;
+
+  for (int i=0; i&lt10; ++i)
+    std::cout &lt&lt fib_wst.fib(i) &lt&lt '\n';
+
+  const std::stacktrace& trace = fib_wst.get_max_trace();
+  std::cout &lt&lt "Max stack depth: " &lt&lt trace.size() &lt&lt '\n';
+
+  for (const auto& t : trace)
+    std::cout &lt&lt
+      std::format (
+       "{}:{} {}\n",
+       t.source_file(), t.source_line(), t.description()
+    );
 }
           </code></pre>
           <aside class="notes">
