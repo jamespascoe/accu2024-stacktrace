@@ -156,6 +156,9 @@ int main(void)
     - How to save stacktraces for later
     - How do we use stacktraces for catching segfaults
     - What about multi-threading and re-entrancy
+
+  7. Conclusions
+
 -->
 
         <section>
@@ -170,6 +173,23 @@ int main(void)
           <aside class="notes">
           As a general rule of thumb, nonrentrant functions are generally unsafe to call from signal handlers.
           Do you need to record the whole stack?
+          </aside>
+        </section>
+
+        <section>
+          <h2 style="color:yellow">Conclusions</h2>
+          <ul>
+            <span class="fragment"><li>Stacktraces are more than tools for debugging logic</li>
+              <span class="fragment"><ul><li>Assertions, </span>
+              <span class="fragment">exceptions, </span>
+              <span class="fragment">object lifetimes</li></ul></span>
+            <span class="fragment"><li>Stack depth is often enough</li>
+            <span class="fragment"><ul><li>Efficient to store - easy to chart</li></ul>
+            <span class="fragment"><li>Use with caution in signal handlers</li></span>
+            <span class="fragment"><ul><li>Unsafe asynchronous calls can deadlock</li></ul>
+            <span class="fragment"><li><span style="color:yellow">Debugging starts in the design phase</span></li>
+          </ul>
+          <aside class="notes">
           </aside>
         </section>
 
