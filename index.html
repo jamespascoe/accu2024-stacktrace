@@ -117,7 +117,8 @@ int main(void)
   fib_with_stacktrace fib_wst;
 
   for (int i=0; i&lt10; ++i)
-    std::cout &lt&lt fib_wst.fib(i) &lt&lt '\n';
+    std::cout &lt&lt fib_wst.fib(i) &lt&lt ' ';
+  std::cout &lt&lt '\n';
 
   const std::stacktrace& trace = fib_wst.get_max_trace();
   std::cout &lt&lt "Max stack depth: " &lt&lt trace.size() &lt&lt '\n';
@@ -136,6 +137,33 @@ int main(void)
             - Toolchain support
           </aside>
         </section>
+
+
+        <section>
+          <h2>Fibonacci Output</h2>
+          <pre><code data-trim data-line-numbers="">
+0 1 1 2 3 5 8 13 21 34
+Max stack depth was: 13
+stacktrace.cpp:17 fib_with_stacktrace::fib(unsigned int)
+stacktrace.cpp:24 fib_with_stacktrace::fib(unsigned int)
+stacktrace.cpp:24 fib_with_stacktrace::fib(unsigned int)
+stacktrace.cpp:24 fib_with_stacktrace::fib(unsigned int)
+stacktrace.cpp:24 fib_with_stacktrace::fib(unsigned int)
+stacktrace.cpp:24 fib_with_stacktrace::fib(unsigned int)
+stacktrace.cpp:24 fib_with_stacktrace::fib(unsigned int)
+stacktrace.cpp:24 fib_with_stacktrace::fib(unsigned int)
+stacktrace.cpp:24 fib_with_stacktrace::fib(unsigned int)
+stacktrace.cpp:38 main
+:0
+:0 _start
+:0
+          </code></pre>
+          <aside class="notes">
+          </aside>
+        </section>
+
+
+
 
 <!--
 
@@ -157,14 +185,12 @@ int main(void)
     - How do we use stacktraces for catching segfaults
     - What about multi-threading and re-entrancy
 
-  7. Conclusions
-
 -->
 
         <section>
           <h2 style="color:yellow">Async Signal Safety</h2>
           <ul>
-            <span class="fragment"><li>Can I use <a href="">std::stacktrace</a> in a signal handler?</li>
+            <span class="fragment"><li>Can I use <a href="https://en.cppreference.com/w/cpp/header/stacktrace">std::stacktrace</a> in a signal handler?</li>
             <span class="fragment"><li>Not currently, but the design is extensible</li>
             <span class="fragment"><li>Custom allocators and lazy trace frames</li>
             <span class="fragment"><li>Consider using <a href="https://www.boost.org/doc/libs/1_84_0/doc/html/stacktrace/reference.html#header.boost.stacktrace.safe_dump_to_hpp">Boost:stacktrace::safe_dump_to</a></li>
@@ -183,8 +209,8 @@ int main(void)
               <span class="fragment"><ul><li>Assertions, </span>
               <span class="fragment">exceptions, </span>
               <span class="fragment">object lifetimes</li></ul></span>
-            <span class="fragment"><li>Stack depth is often enough</li>
-            <span class="fragment"><ul><li>Efficient to store - easy to chart</li></ul>
+            <span class="fragment"><li>Stack depth is useful</li>
+            <span class="fragment"><ul><li>Inexpensive to store - easy to chart</li></ul>
             <span class="fragment"><li>Use with caution in signal handlers</li></span>
             <span class="fragment"><ul><li>Unsafe asynchronous calls can deadlock</li></ul>
             <span class="fragment"><li><span style="color:yellow">Debugging starts in the design phase</span></li>
