@@ -164,26 +164,38 @@ stacktrace.cpp:38 main
 
 
 
-
 <!--
 
-  5. Output
+  4. Build
 
-    - Show output (could combine with previous slide)
-    - Compiler options matter:
-     - -O0 -g -rdynamic
+    - GCC build must be enabled with:
+     - - -enable-libstdcxx-backtrace=yes
+    - 'libstdcxx-backtrace' is the implementation:
+     - <gcc trunk>/libstdc++-v3/include/std/stacktrace
+     - <gcc trunk>/libbacktrace
+    - Compiler options:
+     - -O0 -g -rdynamic -lstdc++_libstacktrace
 
-  5. GDB Demo Video
 
-    - Show video and discuss
-    - Point out that libc refers to the C standard library and glibc is an implementation of libc
-    - Tip: Provide link to GDB console
+  4.5 Output
 
-  6. API Overview
+  5 Introspection
 
-    - How to save stacktraces for later
-    - How do we use stacktraces for catching segfaults
-    - What about multi-threading and re-entrancy
+  directory /home/pascoej/glibc/csu
+  break _start
+  __libc_start_main (glibc 2.2.5 on my system)
+
+  6. Observations
+
+    - Can attach more information to stack frames via hash support
+      - std::unordered_map<std::stacktrace_entry, int> params;
+    - Native handle provides access to the underlying data structure
+      - implementation defined, but useful
+
+
+
+
+
 
 -->
 
