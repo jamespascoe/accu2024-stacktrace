@@ -77,7 +77,7 @@
 
         <section data-menu-title="Fibonacci Example">
           <h2><a href="https://github.com/jamespascoe/accu2024-example-code/blob/master/stacktrace.cpp">Fibonacci (with Stacktrace)</a></h2>
-          <pre><code class="c++" data-trim data-line-numbers="|15-25|17-22|17|17-22|37-38|40-41|43-48|">
+          <pre class="r-stretch"><code class="c++" data-trim data-line-numbers="|15-25|17-22|17|17-22|37-38|40-41|43-48|">
 #include &ltiostream&gt
 #include &ltformat&gt
 #include &ltstacktrace&gt
@@ -151,7 +151,7 @@ stacktrace.cpp:24 fib_with_stacktrace::fib(unsigned int)
 stacktrace.cpp:24 fib_with_stacktrace::fib(unsigned int)
 stacktrace.cpp:24 fib_with_stacktrace::fib(unsigned int)
 stacktrace.cpp:38 main
-:0
+:0 __libc_start_main
 :0 _start
 :0
           </code></pre>
@@ -161,7 +161,7 @@ stacktrace.cpp:38 main
 
         <section>
           <h2>Coroutine Example</h2>
-          <pre><code data-trim data-line-numbers="">
+          <pre class="r-stretch"><code data-trim data-line-numbers="">
 // This is based on the Boost.Beast HTTP coro server example.
 // See the following for documentation and details:
 //
