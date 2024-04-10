@@ -58,14 +58,14 @@
             <span class="fragment"><li>Introspection</li></span>
             <span class="fragment"><ul><li>performance analysis (KPIs etc.)</span></li></ul></span>
             <span class="fragment"><ul><li>insightful with coroutines</span></li></ul></span>
-            <span class="fragment"><li>Signal handling (with caution)</li></span>
+            <span class="fragment"><li>Signal tracing</span><span class="fragment"> (with caution)</span></li>
           </ul>
           <aside class="notes">
           </aside>
         </section>
 
         <section data-menu-title="Approaches">
-          <h3 style="color:yellow">Alternative Approaches</h3>
+          <h3 style="color:yellow">C++ Stacktraces</h3>
           <ul>
             <span class="fragment"><li>C++23 gives us standardised stacktraces</li></span>
             <span class="fragment"><ul><li><a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0881r7.html">P0881R7: A Proposal to Add A Stacktrace Library</a></li></ul></span>
@@ -83,8 +83,8 @@
         </section>
 
         <section data-menu-title="Fibonacci Example">
-          <h2><a href="https://github.com/jamespascoe/accu2024-example-code/blob/master/stacktrace.cpp">Fibonacci (with Stacktrace)</a></h2>
-          <pre class="r-stretch"><code class="c++" data-trim data-line-numbers="|15-25|17-22|17|17-22|37-38|40-41|43-48|">
+          <h2><a href="https://github.com/jamespascoe/accu2024-example-code/blob/master/stacktrace.cpp">Fibonacci (with stacktrace)</a></h2>
+          <pre class="r-stretch"><code class="c++" data-trim data-line-numbers="|15-25|17-22|17|17-22|37-38|40-41|43-49|">
 #include &ltiostream&gt
 #include &ltformat&gt
 #include &ltstacktrace&gt
@@ -170,7 +170,7 @@ stacktrace.cpp:24 fib_with_stacktrace::fib(unsigned int)
 stacktrace.cpp:24 fib_with_stacktrace::fib(unsigned int)
 stacktrace.cpp:24 fib_with_stacktrace::fib(unsigned int)
 stacktrace.cpp:38 main
-:0 __libc_start_main
+:0 __libc_start_main (&ltglibc trunk&gt/csu/libc-start.c:129)
 :0 _start
 :0
           </code></pre>
@@ -364,7 +364,7 @@ int main(int argc, char *argv[])
 
         <section>
           <h2>Coroutine Output</h2>
-          <pre><code class="language-plaintext" data-trim data-line-numbers="|1-2|3-4|5-6|7-8|9-10|11-12|13-14|15-16|17-18|19-20|21-22|">
+          <pre class="r-stretch"><code class="language-plaintext" data-trim data-line-numbers="|1-2|3-4|5-6|7-8|9-10|11-12|13-14|15-16|17-18|19-20|21-22|">
 /home/pascoej/accu2024-example-code/coro_http_server.cpp:58
   operator()
 /home/pascoej/accu2024-example-code/coro_http_server.cpp:71
