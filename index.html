@@ -54,24 +54,31 @@
           <h3 style="color:yellow">Stacktraces, tracebacks, call sequences</h3>
           <ul>
             <span class="fragment"><li>Locate problems without a debugger</li></span>
-            <span class="fragment"><ul><li>assertions, exceptions, post mortem</li></ul></span>
-            <span class="fragment"><li>Analyse performance</li></span>
-            <span class="fragment"><ul><li>buffer stacktraces </span><span class="fragment">(combine with metrics)</span></li></ul></span>
-            <span class="fragment"><li>Prior to C++23, no standard stacktraces</li></span>
-            <span class="fragment">
-              <ul>
-                <li>
-                  <a href="https://www.gnu.org/software/libc/manual/html_node/Backtraces.html">backtrace</a>, 
-                  <a href="https://www.nongnu.org/libunwind/">libunwind</a>, 
-                  <a href="https://www.commandlinux.com/man-page/man1/catchsegv.1.html">catchsegv</a>
-                </li>
-              </ul>
-            </span>
-            <span class="fragment"><li><a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0881r7.html">P0881R7: A Proposal to Add A Stacktrace Library</a></li></span>
-            <span class="fragment"><ul><li>based on <a href="https://www.boost.org/doc/libs/master/doc/html/stacktrace.html">Boost::Stacktrace</a></li></ul></span>
+            <span class="fragment"><ul><li>assertions, exceptions, object lifetimes</li></ul></span>
+            <span class="fragment"><li>Introspection</li></span>
+            <span class="fragment"><ul><li>performance analysis (KPIs etc.)</span></li></ul></span>
+            <span class="fragment"><ul><li>insightful with coroutines</span></li></ul></span>
+            <span class="fragment"><li>Signal handling (with caution)</li></span>
           </ul>
           <aside class="notes">
-            Backtrace (glibc), libunwind (LLVM), catchsegv (Linux)
+          </aside>
+        </section>
+
+        <section data-menu-title="Approaches">
+          <h3 style="color:yellow">Alternative Approaches</h3>
+          <ul>
+            <span class="fragment"><li>C++23 gives us standardised stacktraces</li></span>
+            <span class="fragment"><ul><li><a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0881r7.html">P0881R7: A Proposal to Add A Stacktrace Library</a></li></ul></span>
+            <span class="fragment"><li>Alternatives:</span></li></span>
+            <span class="fragment">
+              <ul>
+                <span class="fragment"><li><a href="https://github.com/jeremy-rifkin/cpptrace">cpptraces</a>: C++11, some signal-safe stack tracing</li></span>
+                <span class="fragment"><li><a href="https://github.com/bombela/backward-cpp">backward-cpp</a>: stack trace pretty printing</li></span>
+                <span class="fragment"><li><a href="https://www.boost.org/doc/libs/master/doc/html/stacktrace.html">Boost::Stacktrace</a>: mature, some signal-safety</li></span>
+              </ul>
+            </span>
+          </ul>
+          <aside class="notes">
           </aside>
         </section>
 
@@ -130,9 +137,21 @@ int main(void)
 }
           </code></pre>
           <aside class="notes">
-            - Code snippet
-            - Mention github (materials) - CMake
-            - Toolchain support
+          </aside>
+        </section>
+
+        <section>
+          <h3 style="color:yellow">Compile and Linking</h3>
+          <ul>
+            <span class="fragment"><li>GCC build must be enabled with:</li></span>
+            <span class="fragment"><ul><li>--enable-libstdcxx-backtrace=yes</li></ul></span>
+            <span class="fragment"><li>'libstdcxx-backtrace' is the implementation:</li></span>
+            <span class="fragment"><ul><li>&ltgcc trunk&gt/libstdc++-v3/include/std/stacktrace</li></ul></span>
+            <span class="fragment"><ul><li>&ltgcc trunk&gt/libbacktrace</li></ul></span>
+            <span class="fragment"><li>Compiler options:</li></span>
+            <span class="fragment"><ul><li>-g -lstdc++_libbacktrace</li></ul></span>
+         </ul>
+          <aside class="notes">
           </aside>
         </section>
 
@@ -155,6 +174,18 @@ stacktrace.cpp:38 main
 :0 _start
 :0
           </code></pre>
+          <aside class="notes">
+          </aside>
+        </section>
+
+        <section>
+          <h3 style="color:yellow">Observations</h3>
+          <ul>
+            <span class="fragment"><li>Attach information to stack frames via hash support</li></span>
+            <span class="fragment"><ul><li>std::unordered_map&ltstd::stacktrace_entry, ...&gt</li></ul></span>
+            <span class="fragment"><li>Native handle provides access to underlying data</li></span>
+            <span class="fragment"><ul><li>Implementation defined, but useful</li></ul></span>
+         </ul>
           <aside class="notes">
           </aside>
         </section>
@@ -375,24 +406,17 @@ int main(int argc, char *argv[])
     - Compiler options:
      - -O0 -g -rdynamic -lstdc++_libstacktrace
 
-
-  4.5 Output
-
   5 Introspection
 
   directory /home/pascoej/glibc/csu
   break _start
   __libc_start_main (glibc 2.2.5 on my system)
 
-  6. Observations
 
-    - Can attach more information to stack frames via hash support
-      - std::unordered_map<std::stacktrace_entry, int> params;
-    - Native handle provides access to the underlying data structure
-      - implementation defined, but useful
+  What if I am not using C++23?
+    - cpptraces: https://github.com/jeremy-rifkin/cpptrace
 
-
-
+    boost stacktrace and backward-cpp
 
 
 
