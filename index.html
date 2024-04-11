@@ -397,35 +397,6 @@ int main(int argc, char *argv[])
           </aside>
         </section>
 
-
-<!--
-
-  4. Build
-
-    - GCC build must be enabled with:
-     - - -enable-libstdcxx-backtrace=yes
-    - 'libstdcxx-backtrace' is the implementation:
-     - <gcc trunk>/libstdc++-v3/include/std/stacktrace
-     - <gcc trunk>/libbacktrace
-    - Compiler options:
-     - -O0 -g -rdynamic -lstdc++_libstacktrace
-
-  5 Introspection
-
-  directory /home/pascoej/glibc/csu
-  break _start
-  __libc_start_main (glibc 2.2.5 on my system)
-
-
-  What if I am not using C++23?
-    - cpptraces: https://github.com/jeremy-rifkin/cpptrace
-
-    boost stacktrace and backward-cpp
-
-
-
--->
-
         <section>
           <h2 style="color:yellow">Async Signal Safety</h2>
           <ul>
