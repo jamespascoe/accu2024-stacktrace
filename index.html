@@ -144,10 +144,12 @@ int main(void)
           <h3 style="color:yellow">Compilation and Linking</h3>
           <ul>
             <span class="fragment"><li>GCC build must be enabled with:</li></span>
-            <span class="fragment"><ul><li>--enable-libstdcxx-backtrace=yes</li></ul></span>
+            <span class="fragment"><ul><li><a href="https://gcc.gnu.org/onlinedocs/libstdc++/manual/using_macros.html">--enable-libstdcxx-backtrace=yes</a></li></ul></span>
             <span class="fragment"><li>'libstdcxx-backtrace' is the implementation:</li></span>
-            <span class="fragment"><ul><li>&ltgcc trunk&gt/libstdc++-v3/include/std/stacktrace</li></ul></span>
-            <span class="fragment"><ul><li>&ltgcc trunk&gt/libbacktrace</li></ul></span>
+            <span class="fragment"><ul><li><a href="https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=libstdc%2B%2B-v3/include/std/stacktrace;h=92a69a53d986c5da990594e3f35e724b0a16b501;hb=refs/heads/trunk">
+              &ltgcc trunk&gt/libstdc++-v3/include/std/stacktrace</a></li></ul></span>
+            <span class="fragment"><ul><li><a href="https://gcc.gnu.org/git/?p=gcc.git;a=tree;f=libbacktrace;h=46da9877b26555ae4448a7eb642e7218043cce0a;hb=refs/heads/trunk">
+              &ltgcc trunk&gt/libbacktrace</a></li></ul></span>
             <span class="fragment"><li>Compiler options:</li></span>
             <span class="fragment"><ul><li>-g -lstdc++_libbacktrace</li></ul></span>
          </ul>
@@ -404,17 +406,16 @@ int main(int argc, char *argv[])
         </section>
 
         <section>
-          <h2 style="color:yellow">Async Signal Safety</h2>
+          <h2 style="color:yellow">Asynchronous Signal Safety</h2>
           <ul>
-            <span class="fragment"><li>Can I use <a href="https://en.cppreference.com/w/cpp/header/stacktrace">std::stacktrace</a> in a signal handler?</li>
-            <span class="fragment"><li>Not currently, but the design is extensible</li>
-            <span class="fragment"><li>Custom allocators and lazy trace frames</li>
-            <span class="fragment"><li>Consider using <a href="https://www.boost.org/doc/libs/1_84_0/doc/html/stacktrace/reference.html#header.boost.stacktrace.safe_dump_to_hpp">Boost:stacktrace::safe_dump_to</a></li>
-            <span class="fragment"><li><a href="https://man7.org/linux/man-pages/man7/signal-safety.7.html">signal-safety(7) — Linux manual page</a></li>
+            <span class="fragment"><li>Can I use <a href="https://en.cppreference.com/w/cpp/header/stacktrace">std::stacktrace</a> in a signal handler?</li></span>
+            <span class="fragment"><ul><li>Not currently, but the design is extensible</li></ul></span>
+            <span class="fragment"><li>Exception </span><span class="fragment">+ signal</span><span class="fragment"> = deadlock</span></li>
+            <span class="fragment"><li>Difficult to implement correctly</li>
+            <span class="fragment"><ul><li>Collect minimal information in the handler</li></ul></span>
+            <span class="fragment"><ul><li>Resolve outside (or in anonther process)</li></ul></span>
           </ul>
           <aside class="notes">
-          As a general rule of thumb, nonrentrant functions are generally unsafe to call from signal handlers.
-          Do you need to record the whole stack?
           </aside>
         </section>
 
