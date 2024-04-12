@@ -41,12 +41,18 @@
               <font style="color:yellow">ACCU Bristol and Bath Meetup Coordinator</font>
             </small>
           <aside class="notes">
-          Hello, good afternoon and welcome - my name is Jim Pascoe and today I am going to talk to you about the C++23 Stacktrace
-          library and why its really useful.
+          Hello, good afternoon and welcome - my name is Jim Pascoe and today I am going to talk to you about Stacktraces and
+          in particular, stacktraces in C++. I am going to talk mainly about the C++23 Stacktrace library and how you can use
+          it in interesting ways, but I am also going to discuss some complementary approaches that you may not be aware of.
           <p>
           Here is my email address and URL (if you want to find out a bit about what I've done in the past) and also, this
-          is the link to the online talk, so you can follow along from the comfort of your own browser if you prefer. So,
-          you can use the hamburger icon to skip between the slides and select a light theme if you prefer.
+          is the link to the online talk, so you can follow along from the comfort of your own browser if you prefer. The
+          slides are written using Reveal.js, so you can use the hamburger icon to skip between the slides and select a light
+          theme if you prefer.
+          <p>
+          This is a link to the example code that accompanies the presentation. Along with the C++ is some CMake, so it should be
+          straightforward to build the code on most modern platforms, The slides are written using Reveal.js, so you can use
+          the hamburger icon to skip between the slides and select a light theme if you prefer.
           </aside>
         </section>
 
@@ -61,6 +67,18 @@
             <span class="fragment"><li>Signal tracing</span><span class="fragment"> (use with caution)</span></li>
           </ul>
           <aside class="notes">
+          A call sequence (or call stack) is typically ia stack of function calls (or operations) that are in-flight while a program
+          is running. A 'stacktrace' is a snapshot of the call stack that is logged at some point of interest, like an exception.
+          <p>
+          C++ calls them stacktraces (as does C#), in Python they are tracebacks.
+          <p>
+          The primary use-case for stacktraces is debugging logical errors, for example, tracebacks in Python. In the field, stacktraces
+          allow you to locate problems without a debugger. In C++, stacktraces enrich assertions, exceptions and allow you to debug object
+          lifetime issues. This is particularly useful if you are using an RAII object lifetime strategy to manage resources e.g. network
+          connections.
+          <p>
+          And Signal Tracing - what to do when you encounter a segfault. Now it turns out that using stacktraces in the context of signal
+          handlers is tricky, but more on that later.
           </aside>
         </section>
 
