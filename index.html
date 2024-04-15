@@ -44,6 +44,8 @@
           Hello, good afternoon and welcome - my name is Jim Pascoe and today I am going to talk to you about Stacktraces and
           in particular, stacktraces in C++. I am going to talk mainly about the C++23 Stacktrace library and how you can use
           it in interesting ways, but I am also going to discuss some complementary approaches that you may not be aware of.
+          So, there are two goals for my talk, firstly to show how Stacktraces can be used for more than just debugging logical
+          errors and secondly, to share some libraries and insights that I have found useful.
           <p>
           Here is my email address and URL (if you want to find out a bit about what I've done in the past) and also, this
           is the link to the online talk, so you can follow along from the comfort of your own browser if you prefer. The
@@ -51,8 +53,7 @@
           theme if you prefer.
           <p>
           This is a link to the example code that accompanies the presentation. Along with the C++ is some CMake, so it should be
-          straightforward to build the code on most modern platforms, The slides are written using Reveal.js, so you can use
-          the hamburger icon to skip between the slides and select a light theme if you prefer.
+          straightforward to build the code on most modern platforms,
           </aside>
         </section>
 
@@ -77,8 +78,8 @@
           lifetime issues. This is particularly useful if you are using an RAII object lifetime strategy to manage resources e.g. network
           connections.
           <p>
-          And Signal Tracing - what to do when you encounter a segfault. Now it turns out that using stacktraces in the context of signal
-          handlers is tricky, but more on that later.
+          And Signal Tracing - what to do when you encounter a segfault. It turns out that you have to be careful when using stacktraces
+          in the context of signal handlers, but more on that later.
           </aside>
         </section>
 
@@ -90,13 +91,28 @@
             <span class="fragment"><li>Alternatives:</span></li></span>
             <span class="fragment">
               <ul>
-                <span class="fragment"><li><a href="https://github.com/jeremy-rifkin/cpptrace">cpptraces</a>: C++11, some signal-safe stack tracing</li></span>
+                <span class="fragment"><li><a href="https://github.com/jeremy-rifkin/cpptrace">cpptrace</a>: C++11, some signal-safe stack tracing</li></span>
                 <span class="fragment"><li><a href="https://github.com/bombela/backward-cpp">backward-cpp</a>: stack trace pretty printing</li></span>
                 <span class="fragment"><li><a href="https://www.boost.org/doc/libs/master/doc/html/stacktrace.html">Boost::Stacktrace</a>: mature, some signal-safety</li></span>
               </ul>
             </span>
           </ul>
           <aside class="notes">
+          Before C++23, there was no standard way of producing a stacktrace in C++. If you wanted to get the current call stack, you had to use
+          a combination of compiler support and external libraries. But now, any compiler that implements C++23 will provide stacktrace support
+          as standard (which is a good thing, particularly because it allows us to easily enrich assertions, exceptions, unreachable code).<click>
+          <p>
+          This is the paper that was voted into C++23. Its quite readable, its short and it contains some of the motivation behind the design
+          decisions, so I would recommend having a look even if its just to know what it contains.
+          <p>
+          Apart from what's in C++23, there are some alternate approaches. One, that I am particularly excited about is cpptrace. cpptrace supports
+          C++11 onwards, all of the major platforms and has some nice features over and above C++23. Plus, cpptrace has some good advice on signal
+          safety (which, as it turns out, is quite tricky in the context of stacktracing).
+          <p>
+          backward-cpp is also nice. backward-cpp is primarily a stacktrace pretty-printer and we will see some examples in a minute of why that
+          is important.
+          <p>
+          Boost::stacktrace which is very mature, its what C++23 stacktrace was based on, also has a good advice in the context of signal safety.
           </aside>
         </section>
 
@@ -171,8 +187,10 @@ int main(void)
             <span class="fragment"><li>Compiler options:</li></span>
             <span class="fragment"><ul><li>-g -lstdc++_libbacktrace</li></ul></span>
          </ul>
-          <aside class="notes">
-          </aside>
+         <aside class="notes">
+         I am using GCC 13.0. If you use GCC, you need to configure the compiler to build libstdc++-backtrace. I have a feeling that this has been enabled by default,
+         so this may not be a requirement in GCC 13.3.
+         </aside>
         </section>
 
         <section>
@@ -190,7 +208,7 @@ stacktrace.cpp:24 fib_with_stacktrace::fib(unsigned int)
 stacktrace.cpp:24 fib_with_stacktrace::fib(unsigned int)
 stacktrace.cpp:24 fib_with_stacktrace::fib(unsigned int)
 stacktrace.cpp:38 main
-:0 __libc_start_main (&ltglibc trunk&gt/csu/libc-start.c:129)
+:0 // __libc_start_main (&ltglibc trunk&gt/csu/libc-start.c:129)
 :0 _start
 :0
           </code></pre>
@@ -218,7 +236,7 @@ stacktrace.cpp:38 main
 
         <section>
           <h2><a href="https://github.com/jamespascoe/accu2024-example-code/blob/master/coro_http_server.cpp">Coroutine Example</a></h2>
-          <pre class="stretch"><code class="c++" style="width:105%" data-trim data-line-numbers="|130-164|89-128|33-87|">
+          <pre class="stretch"><code class="c++" style="width:105%" data-trim data-line-numbers="|130-164|89-128|33-87|64-71|">
 // This is based on the Boost.Beast HTTP coro server example.
 // See the following for documentation and details:
 //
