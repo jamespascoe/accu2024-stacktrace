@@ -37,6 +37,7 @@
               <a href="mailto:james@james-pascoe.com">james@james-pascoe.com</a><p>
 
               <a href="http://jamespascoe.github.io/accu2024-stacktrace">http://jamespascoe.github.io/accu2024-stacktrace</a>
+              <a href="https://github.com/jamespascoe/accu2024-example-code">https://github.com/jamespascoe/accu2024-example-code</a>
               <p>
               <font style="color:yellow">ACCU Bristol and Bath Meetup Coordinator</font>
             </small>
@@ -72,10 +73,9 @@
             <span class="fragment"><li>Signal tracing e.g. SEGV</span><span class="fragment"> (but use with caution)</span></li>
           </ul>
           <aside class="notes">
-          C++ calls them stacktraces (as does C#), in Python they are tracebacks.
-          <p>
-          A call sequence (or call stack) is typically a stack of function calls (or operations) that are in-flight while a program
-          is running. A 'stacktrace' is a snapshot of the call stack that is logged at some point of interest, like an exception.
+          C++ calls them stacktraces (as does C#), in Python they are tracebacks. But we probably all recognise a stacktrace
+          as being a snapshot. A snapshot of a sequence of function calls that have led to some interesting event (typically
+          an exception).
           <p>
           The primary use-case for stacktraces is debugging logical errors, for example, tracebacks in Python. In the field, stacktraces
           allow you to locate problems without a debugger. In C++, stacktraces enrich assertions, exceptions and allow you to debug object
@@ -94,7 +94,7 @@
             <span class="fragment"><ul><li><a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0881r7.html">P0881R7: A Proposal to Add A Stacktrace Library</a></li></ul></span>
             <span class="fragment"><li>Alternatives:</span></li></span>
               <ul>
-                <span class="fragment"><li><a href="https://github.com/jeremy-rifkin/cpptrace">cpptrace</a>: C++11, some signal-safety</li></span>
+                <span class="fragment"><li><a href="https://github.com/jeremy-rifkin/cpptrace">cpptrace</a>: C++11, good treatment of signal-safety</li></span>
                 <span class="fragment"><li><a href="https://github.com/bombela/backward-cpp">backward-cpp</a>: stack trace pretty printing</li></span>
                 <span class="fragment"><li><a href="https://www.boost.org/doc/libs/master/doc/html/stacktrace.html">Boost::Stacktrace</a>: mature, also some signal-safety</li></span>
               </ul>
@@ -120,7 +120,7 @@
 
         <section data-menu-title="Fibonacci Example">
           <h2><a href="https://github.com/jamespascoe/accu2024-example-code/blob/master/stacktrace.cpp">Fibonacci (with stacktrace)</a></h2>
-          <pre class="r-stretch"><code class="c++" data-trim data-line-numbers="|15-25|17-22|17|17-22|27-30|37-38|40-41|43-49|">
+          <pre class="r-stretch"><code class="c++" data-trim data-line-numbers="|15-25|17-22|17|17-22|27-30|37-38|41-42|44-49|">
 #include &ltiostream&gt
 #include &ltformat&gt
 #include &ltstacktrace&gt
@@ -452,7 +452,7 @@ int main(int argc, char *argv[])
             <span class="fragment"><li>Exception </span><span class="fragment">+ signal</span><span class="fragment"> = deadlock</span></li>
             <span class="fragment"><li>Difficult to implement correctly</li>
             <span class="fragment"><ul><li>Collect minimal information in the handler</li></ul></span>
-            <span class="fragment"><ul><li>Resolve outside (or in anonther process)</li></ul></span>
+            <span class="fragment"><ul><li>Resolve outside (or in another process)</li></ul></span>
           </ul>
           <aside class="notes">
           </aside>
