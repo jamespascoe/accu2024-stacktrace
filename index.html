@@ -61,17 +61,21 @@
           <h3 style="color:yellow">Stacktraces, tracebacks, call sequences</h3>
           <ul>
             <span class="fragment"><li>Locate problems without a debugger</li></span>
-            <span class="fragment"><ul><li>assertions, exceptions, object lifetimes</li></ul></span>
+            <span class="fragment"><ul><li>
+              assertions,
+              <span class="fragment"> exceptions,</span>
+              <span class="fragment"> unreachable code</span>
+            </li></ul></span>
             <span class="fragment"><li>Introspection</li></span>
-            <span class="fragment"><ul><li>performance analysis (KPIs etc.)</span></li></ul></span>
+            <span class="fragment"><ul><li>object lifetimes e.g. RAII</span></li></ul></span>
             <span class="fragment"><ul><li>insightful with coroutines</span></li></ul></span>
-            <span class="fragment"><li>Signal tracing</span><span class="fragment"> (use with caution)</span></li>
+            <span class="fragment"><li>Signal tracing e.g. SEGV</span><span class="fragment"> (but use with caution)</span></li>
           </ul>
           <aside class="notes">
-          A call sequence (or call stack) is typically ia stack of function calls (or operations) that are in-flight while a program
-          is running. A 'stacktrace' is a snapshot of the call stack that is logged at some point of interest, like an exception.
-          <p>
           C++ calls them stacktraces (as does C#), in Python they are tracebacks.
+          <p>
+          A call sequence (or call stack) is typically a stack of function calls (or operations) that are in-flight while a program
+          is running. A 'stacktrace' is a snapshot of the call stack that is logged at some point of interest, like an exception.
           <p>
           The primary use-case for stacktraces is debugging logical errors, for example, tracebacks in Python. In the field, stacktraces
           allow you to locate problems without a debugger. In C++, stacktraces enrich assertions, exceptions and allow you to debug object
@@ -89,18 +93,16 @@
             <span class="fragment"><li>C++23 gives us standardised stacktraces</li></span>
             <span class="fragment"><ul><li><a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0881r7.html">P0881R7: A Proposal to Add A Stacktrace Library</a></li></ul></span>
             <span class="fragment"><li>Alternatives:</span></li></span>
-            <span class="fragment">
               <ul>
-                <span class="fragment"><li><a href="https://github.com/jeremy-rifkin/cpptrace">cpptrace</a>: C++11, some signal-safe stack tracing</li></span>
+                <span class="fragment"><li><a href="https://github.com/jeremy-rifkin/cpptrace">cpptrace</a>: C++11, some signal-safety</li></span>
                 <span class="fragment"><li><a href="https://github.com/bombela/backward-cpp">backward-cpp</a>: stack trace pretty printing</li></span>
-                <span class="fragment"><li><a href="https://www.boost.org/doc/libs/master/doc/html/stacktrace.html">Boost::Stacktrace</a>: mature, some signal-safety</li></span>
+                <span class="fragment"><li><a href="https://www.boost.org/doc/libs/master/doc/html/stacktrace.html">Boost::Stacktrace</a>: mature, also some signal-safety</li></span>
               </ul>
-            </span>
           </ul>
           <aside class="notes">
           Before C++23, there was no standard way of producing a stacktrace in C++. If you wanted to get the current call stack, you had to use
           a combination of compiler support and external libraries. But now, any compiler that implements C++23 will provide stacktrace support
-          as standard (which is a good thing, particularly because it allows us to easily enrich assertions, exceptions, unreachable code).<click>
+          as standard (which is a good thing).<click>
           <p>
           This is the paper that was voted into C++23. Its quite readable, its short and it contains some of the motivation behind the design
           decisions, so I would recommend having a look even if its just to know what it contains.
@@ -118,7 +120,7 @@
 
         <section data-menu-title="Fibonacci Example">
           <h2><a href="https://github.com/jamespascoe/accu2024-example-code/blob/master/stacktrace.cpp">Fibonacci (with stacktrace)</a></h2>
-          <pre class="r-stretch"><code class="c++" data-trim data-line-numbers="|15-25|17-22|17|17-22|37-38|40-41|43-49|">
+          <pre class="r-stretch"><code class="c++" data-trim data-line-numbers="|15-25|17-22|17|17-22|27-30|37-38|40-41|43-49|">
 #include &ltiostream&gt
 #include &ltformat&gt
 #include &ltstacktrace&gt
@@ -171,6 +173,7 @@ int main(void)
 }
           </code></pre>
           <aside class="notes">
+          std::stacktrace is an iterable container for stactrace entries, where each entry is a stack frame.
           </aside>
         </section>
 
@@ -458,14 +461,14 @@ int main(int argc, char *argv[])
         <section>
           <h2 style="color:yellow">Conclusions</h2>
           <ul>
-            <span class="fragment"><li>Stacktraces are more than tools for debugging logic</li>
-              <span class="fragment"><ul><li>Assertions, </span>
+            <span class="fragment"><li>Stacktraces are useful</li>
+              <span class="fragment"><ul><li>Enrichment, </span>
               <span class="fragment">introspection, </span>
               <span class="fragment">object lifetimes</li></ul></span>
             <span class="fragment"><li>Stack depth can be a useful proxy</li>
             <span class="fragment"><ul><li>Inexpensive to store - easy to chart</li></ul>
             <span class="fragment"><li>Use with caution in signal handlers</li></span>
-            <span class="fragment"><ul><li>See: <a href="https://github.com/jeremy-rifkin/cpptrace">cpptraces</a> and 
+            <span class="fragment"><ul><li>See: <a href="https://github.com/jeremy-rifkin/cpptrace">cpptrace</a> and 
               <a href="https://www.boost.org/doc/libs/master/doc/html/stacktrace/reference.html#header.boost.stacktrace.safe_dump_to_hpp">Boost::safe_dump_to</a></li></ul>
             <span class="fragment"><li>Debugging starts in the design phase</li></span>
           </ul>
