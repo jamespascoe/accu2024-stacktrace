@@ -78,9 +78,8 @@
           an exception).
           <p>
           The primary use-case for stacktraces is debugging logical errors, for example, tracebacks in Python. In the field, stacktraces
-          allow you to locate problems without a debugger. In C++, stacktraces enrich assertions, exceptions and allow you to debug object
-          lifetime issues. This is particularly useful if you are using an RAII object lifetime strategy to manage resources e.g. network
-          connections.
+          allow you to locate problems without a debugger. In C++, stacktraces enrich assertions, exceptions and allow us to see the
+          call sequence that has led to some piece of unreachable code or undefined state.
           <p>
           And Signal Tracing - what to do when you encounter a segfault. It turns out that you have to be careful when using stacktraces
           in the context of signal handlers, but more on that later.
@@ -88,7 +87,7 @@
         </section>
 
         <section data-menu-title="Approaches">
-          <h3 style="color:yellow">C++ Stacktraces</h3>
+          <h3 style="color:yellow">Stacktraces in C++</h3>
           <ul>
             <span class="fragment"><li>C++23 gives us standardised stacktraces</li></span>
             <span class="fragment"><ul><li><a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0881r7.html">P0881R7: A Proposal to Add A Stacktrace Library</a></li></ul></span>
@@ -239,7 +238,7 @@ stacktrace.cpp:38 main
 
         <section>
           <h2><a href="https://github.com/jamespascoe/accu2024-example-code/blob/master/coro_http_server.cpp">Coroutine Example</a></h2>
-          <pre class="stretch"><code class="c++" style="width:105%" data-trim data-line-numbers="|129-163|88-127|32-86|63-70|68|">
+          <pre class="stretch"><code class="c++" style="width:105%" data-trim data-line-numbers="|129-163|88-127|116|117-125|32-86|63-70|68|">
 // This is based on the Boost.Beast HTTP coro server example.
 // See the following for documentation and details:
 //
@@ -464,12 +463,12 @@ int main(int argc, char *argv[])
           <h2 style="color:yellow">Asynchronous Signal Safety</h2>
           <ul>
             <span class="fragment"><li>How do I get a stack trace in a signal handler?</li></span>
-            <span class="fragment"><li>Difficult to implement correctly</li>
+            <span class="fragment"><li>Tricky to implement safely</li>
             <span class="fragment"><ul><li>Collect minimal information in the handler</li></ul></span>
             <span class="fragment"><ul><li>Resolve outside (or in another process)</li></ul></span>
 
-            <span class="fragment"><li><a href="https://en.cppreference.com/w/cpp/header/stacktrace">std::stacktrace</a> is not desinged to be signal safe</li></span>
-            <span class="fragment"><ul><li>But the design is extensible</li></ul></span>
+            <span class="fragment"><li><a href="https://en.cppreference.com/w/cpp/header/stacktrace">std::stacktrace</a> is not (currently) signal safe</li></span>
+            <span class="fragment"><ul><li>But could be in the future</li></ul></span>
             <span class="fragment"><li>See: <a href="https://github.com/jeremy-rifkin/cpptrace">cpptrace</a> and 
               <a href="https://www.boost.org/doc/libs/master/doc/html/stacktrace/reference.html#header.boost.stacktrace.safe_dump_to_hpp">Boost::safe_dump_to</a></li>
           </ul>
