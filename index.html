@@ -239,7 +239,7 @@ stacktrace.cpp:38 main
 
         <section>
           <h2><a href="https://github.com/jamespascoe/accu2024-example-code/blob/master/coro_http_server.cpp">Coroutine Example</a></h2>
-          <pre class="stretch"><code class="c++" style="width:105%" data-trim data-line-numbers="|130-164|89-128|33-87|64-71|">
+          <pre class="stretch"><code class="c++" style="width:105%" data-trim data-line-numbers="|129-163|88-127|32-86|63-70|68|">
 // This is based on the Boost.Beast HTTP coro server example.
 // See the following for documentation and details:
 //
@@ -272,8 +272,7 @@ void error(beast::error_code ec, char const* msg)
   std::cerr &lt&lt std::format("Error: {} - {}\n", msg, ec.message());
 }
 
-  void
-do_session(
+void do_session(
     beast::tcp_stream& stream,
     asio::yield_context yield)
 {
@@ -386,7 +385,7 @@ int main(int argc, char *argv[])
 
   asio::io_context ioc{num_threads};
 
-  // Spawn a stackful coroutine
+  // Spawn a coroutine
   boost::asio::spawn(ioc,
       std::bind(
         &do_listen,
@@ -406,10 +405,23 @@ int main(int argc, char *argv[])
 }
           </code></pre>
           <aside class="notes">
-          Stackful coroutines mean that each coroutine has its own stack. By contrast, C++20
-          coroutines are stackless - they suspend execution by returning to the caller and
-          the data that is required to resume execution is stored in a callable on the heap
-          (so separately from the stack).
+          Ok, so lets have a look at a more complex example. This is a web server that is implemented
+          using Coroutines. It's based on Boost.Beast, which is an excellent header only library for
+          writing networking code. What Boost.Beast gives you is a set of low-level networking primitives,
+          including support for HTTP and Websockets. Its based on Boost.Asio and also has some excellent
+          examples of networking code written using C++ coroutines.
+          <p>
+          When spawn is invoked, Boost.Asio uses a strand to dispatch an internal handler that creates a coroutine
+          using 'do_listen' as an entry point. <click>do_listen gets invoked within the call to spawn, we do some
+          setup and then the coroutine yields back to the dispatcher on the async_accept. At some point in the future,
+          we get a TCP connection and the coroutine is resumed on line 117. At that point, we spawn another coroutine
+          to 'do the session'. Similar idea, we read some data asynchronously and then prepare a response.
+          <p>
+          Now, just before we send the response, I am going to print a stacktrace and I am going to do so in a
+          particular format. <click> Who can tell me what I am doing on lne 68? Yes, I am removing the template
+          arguments and the function's parameters from the output (so, I am just printing the function's name).
+          <p>
+          Lets look at the output.
           </aside>
         </section>
 
@@ -441,18 +453,25 @@ int main(int argc, char *argv[])
 :0
           </code></pre>
           <aside class="notes">
+          So, the reason that I formatted the output, is that by default, you will get everything,
+          which includes template parameters plus lots of function arguments that also have complex
+          template parameters. So, whilst its a good idea to enrich code with stacktraces, just be
+          careful that the output may well be quite extensive.
           </aside>
         </section>
 
         <section>
           <h2 style="color:yellow">Asynchronous Signal Safety</h2>
           <ul>
-            <span class="fragment"><li>Can I use <a href="https://en.cppreference.com/w/cpp/header/stacktrace">std::stacktrace</a> in a signal handler?</li></span>
-            <span class="fragment"><ul><li>Not currently, but the design is extensible</li></ul></span>
-            <span class="fragment"><li>Exception </span><span class="fragment">+ signal</span><span class="fragment"> = deadlock</span></li>
+            <span class="fragment"><li>How do I get a stack trace in a signal handler?</li></span>
             <span class="fragment"><li>Difficult to implement correctly</li>
             <span class="fragment"><ul><li>Collect minimal information in the handler</li></ul></span>
             <span class="fragment"><ul><li>Resolve outside (or in another process)</li></ul></span>
+
+            <span class="fragment"><li><a href="https://en.cppreference.com/w/cpp/header/stacktrace">std::stacktrace</a> is not desinged to be signal safe</li></span>
+            <span class="fragment"><ul><li>But the design is extensible</li></ul></span>
+            <span class="fragment"><li>See: <a href="https://github.com/jeremy-rifkin/cpptrace">cpptrace</a> and 
+              <a href="https://www.boost.org/doc/libs/master/doc/html/stacktrace/reference.html#header.boost.stacktrace.safe_dump_to_hpp">Boost::safe_dump_to</a></li>
           </ul>
           <aside class="notes">
           </aside>
@@ -468,8 +487,7 @@ int main(int argc, char *argv[])
             <span class="fragment"><li>Stack depth can be a useful proxy</li>
             <span class="fragment"><ul><li>Inexpensive to store - easy to chart</li></ul>
             <span class="fragment"><li>Use with caution in signal handlers</li></span>
-            <span class="fragment"><ul><li>See: <a href="https://github.com/jeremy-rifkin/cpptrace">cpptrace</a> and 
-              <a href="https://www.boost.org/doc/libs/master/doc/html/stacktrace/reference.html#header.boost.stacktrace.safe_dump_to_hpp">Boost::safe_dump_to</a></li></ul>
+            <span class="fragment"><li>Be mindful of stacktrace output</span><span class="fragment"> (extensive)</span></li>
             <span class="fragment"><li>Debugging starts in the design phase</li></span>
           </ul>
           <aside class="notes">
@@ -497,7 +515,10 @@ int main(int argc, char *argv[])
           <a href="http://www.james-pascoe.com">http://www.james-pascoe.com</a><br>
           <a href="mailto:james@james-pascoe.com">james@james-pascoe.com</a><p>
 
+          <small>
           <a href="http://jamespascoe.github.io/accu2024-stacktrace">http://jamespascoe.github.io/accu2024-stacktrace</a>
+          <a href="https://github.com/jamespascoe/accu2024-example-code">https://github.com/jamespascoe/accu2024-example-code</a>
+          </small>
           <p>
           <font style="color:yellow">ACCU Bristol and Bath Meetup Coordinator</font>
         </section>
