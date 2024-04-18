@@ -42,6 +42,7 @@
               <font style="color:yellow">ACCU Bristol and Bath Meetup Coordinator</font>
             </small>
           <aside class="notes">
+          <small>
           Hello, good afternoon and welcome - my name is Jim Pascoe and today I am going to talk to you about Stacktraces and
           in particular, stacktraces in C++. I am going to talk mainly about the C++23 Stacktrace library and how you can use
           it in interesting ways, but I am also going to discuss some complementary approaches that you may not be aware of.
@@ -55,6 +56,7 @@
           <p>
           This is a link to the example code that accompanies the presentation. Along with the C++ is some CMake, so it should be
           straightforward to build the code on most modern platforms,
+          </small>
           </aside>
         </section>
 
@@ -69,10 +71,11 @@
             </li></ul></span>
             <span class="fragment"><li>Introspection</li></span>
             <span class="fragment"><ul><li>object lifetimes e.g. RAII</span></li></ul></span>
-            <span class="fragment"><ul><li>insightful with coroutines</span></li></ul></span>
+            <span class="fragment"><ul><li>useful with coroutines</span></li></ul></span>
             <span class="fragment"><li>Signal tracing e.g. SEGV</span><span class="fragment"> (but use with caution)</span></li>
           </ul>
           <aside class="notes">
+          <small>
           C++ calls them stacktraces (as does C#), in Python they are tracebacks. But we probably all recognise a stacktrace
           as being a snapshot. A snapshot of a sequence of function calls that have led to some interesting event (typically
           an exception).
@@ -83,6 +86,7 @@
           <p>
           And Signal Tracing - what to do when you encounter a segfault. It turns out that you have to be careful when using stacktraces
           in the context of signal handlers, but more on that later.
+          </small>
           </aside>
         </section>
 
@@ -91,7 +95,7 @@
           <ul>
             <span class="fragment"><li>C++23 gives us standardised stacktraces</li></span>
             <span class="fragment"><ul><li><a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0881r7.html">P0881R7: A Proposal to Add A Stacktrace Library</a></li></ul></span>
-            <span class="fragment"><li>Alternatives:</span></li></span>
+            <span class="fragment"><li>Complementary libraries:</span></li></span>
               <ul>
                 <span class="fragment"><li><a href="https://github.com/jeremy-rifkin/cpptrace">cpptrace</a>: C++11, good treatment of signal-safety</li></span>
                 <span class="fragment"><li><a href="https://github.com/bombela/backward-cpp">backward-cpp</a>: stack trace pretty printing</li></span>
@@ -99,6 +103,7 @@
               </ul>
           </ul>
           <aside class="notes">
+          <small>
           Before C++23, there was no standard way of producing a stacktrace in C++. If you wanted to get the current call stack, you had to use
           a combination of compiler support and external libraries. But now, any compiler that implements C++23 will provide stacktrace support
           as standard (which is a good thing).<click>
@@ -114,6 +119,7 @@
           is important.
           <p>
           Boost::stacktrace which is very mature, its what C++23 stacktrace was based on, also has a good advice in the context of signal safety.
+          </small>
           </aside>
         </section>
 
@@ -172,7 +178,9 @@ int main(void)
 }
           </code></pre>
           <aside class="notes">
+          <small>
           std::stacktrace is an iterable container for stactrace entries, where each entry is a stack frame.
+          </small>
           </aside>
         </section>
 
@@ -190,8 +198,10 @@ int main(void)
             <span class="fragment"><ul><li>-g -lstdc++_libbacktrace</li></ul></span>
          </ul>
          <aside class="notes">
+         <small>
          I am using GCC 13.0. If you use GCC, you need to configure the compiler to build libstdc++-backtrace. I have a feeling that this has been enabled by default,
          so this may not be a requirement in GCC 13.3.
+         </small>
          </aside>
         </section>
 
@@ -238,7 +248,7 @@ stacktrace.cpp:38 main
 
         <section>
           <h2><a href="https://github.com/jamespascoe/accu2024-example-code/blob/master/coro_http_server.cpp">Coroutine Example</a></h2>
-          <pre class="stretch"><code class="c++" style="width:105%" data-trim data-line-numbers="|129-163|88-127|116|117-125|32-86|63-70|68|">
+          <pre class="stretch"><code class="c++" style="width:105%" data-trim data-line-numbers="|129-163|147-152|154-160|88-127|116|117-125|32-86|42-61|63-70|68|">
 // This is based on the Boost.Beast HTTP coro server example.
 // See the following for documentation and details:
 //
@@ -404,6 +414,7 @@ int main(int argc, char *argv[])
 }
           </code></pre>
           <aside class="notes">
+          <small>
           Ok, so lets have a look at a more complex example. This is a web server that is implemented
           using Coroutines. It's based on Boost.Beast, which is an excellent header only library for
           writing networking code. What Boost.Beast gives you is a set of low-level networking primitives,
@@ -421,6 +432,7 @@ int main(int argc, char *argv[])
           arguments and the function's parameters from the output (so, I am just printing the function's name).
           <p>
           Lets look at the output.
+          </small>
           </aside>
         </section>
 
@@ -452,17 +464,19 @@ int main(int argc, char *argv[])
 :0
           </code></pre>
           <aside class="notes">
+          <small>
           So, the reason that I formatted the output, is that by default, you will get everything,
           which includes template parameters plus lots of function arguments that also have complex
           template parameters. So, whilst its a good idea to enrich code with stacktraces, just be
           careful that the output may well be quite extensive.
+          </small>
           </aside>
         </section>
 
         <section>
           <h2 style="color:yellow">Asynchronous Signal Safety</h2>
           <ul>
-            <span class="fragment"><li>How do I get a stack trace in a signal handler?</li></span>
+            <span class="fragment"><li>How do I get a stacktrace in a signal handler?</li></span>
             <span class="fragment"><li>Tricky to implement safely</li>
             <span class="fragment"><ul><li>Collect minimal information in the handler</li></ul></span>
             <span class="fragment"><ul><li>Resolve outside (or in another process)</li></ul></span>
